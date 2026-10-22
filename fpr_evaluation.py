@@ -280,7 +280,7 @@ def verdict_run(a: Analysis) -> tuple[str, str]:
             f"mit {fmt_int(f.cells)} statt {fmt_int(e.cells)} Zellen.")
     if f.cells < e.cells:
         return "success", head + f" Die Tabelle ist um den Faktor {fmt_factor(e.cells / f.cells)} kleiner."
-    return "info", head + " Bei diesen Gewichten ist die exakte Rechnung billiger: das FPTAS lohnt sich erst bei großen Zahlen (Experiment 1)."
+    return "info", head + " Bei diesen Gewichten ist die exakte Rechnung billiger: das FPTAS lohnt sich erst bei großen Zahlen oder gröberem ε (Experiment 1 und 2)."
 
 
 def verdict_trap(t: TrapResult) -> tuple[str, str]:
@@ -331,7 +331,7 @@ def verdict_trap_sweep(rows: list[dict]) -> tuple[str, str]:
     best = max(rows, key=lambda r: r["quality"])
     return "warning", (
         f"Die gebaute Falle drückt die Güte bis auf {fmt_quality(worst['quality'])} (n = {worst['n']}, ε = {fmt_eps(worst['eps'])}, garantiert {fmt_guarantee(worst['eps'])}); "
-        f"bei ε = {fmt_eps(best['eps'])} und n = {best['n']} bleibt sie bei {fmt_quality(best['quality'])}. Die Garantie hält immer; die Falle kostet deutlich mehr Güte als die Zufallsinstanzen aus Experiment 2, bleibt aber über der Garantie."
+        f"bei ε = {fmt_eps(best['eps'])} und n = {best['n']} bleibt sie bei {fmt_quality(best['quality'])}. Die Garantie hält in allen gezeigten Fällen; die Falle kostet deutlich mehr Güte als die Zufallsinstanzen aus Experiment 2, bleibt aber über der Garantie."
     )
 
 

@@ -26,7 +26,7 @@ def test_claim_cells_grow_by_a_factor_of_ten_per_digit_while_the_fptas_table_sta
 
 
 def test_claim_the_cell_formula_holds_on_real_runs_up_to_six_digits():
-    """README: die Zellenformel n · (W + 1) ist an echten Läufen bestätigt (alle fünf Instanzen bis 4 Stellen, je eine bei 5 und 6 Stellen)."""
+    """README: die Zellenzahl eines Laufs ist die Tabellengröße n · (W + 1) (aus der Formel gesetzt, nicht im Lauf gezählt; alle fünf Instanzen bis 4 Stellen, je eine bei 5 und 6 Stellen)."""
     for d in range(1, 7):
         for seed in (C.E1_SEEDS if d <= 4 else C.E1_SEEDS[:1]):
             inst = make_instance(30, d, "unc", seed)

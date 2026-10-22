@@ -135,7 +135,7 @@ with st.expander("Drei Begriffe", expanded=True):
         """
 1. **Pseudopolynomiell.** Die Tabelle der exakten Rechnung hat n · (W + 1) Zellen (n Pakete, Kapazität W): polynomial im **Wert** von W, aber W hat bei d Stellen etwa 10^d. Für die **Länge** der Eingabe (die Stellen) ist das exponentiell.
 2. **FPTAS.** Rundet man die Werte auf Vielfache eines Schritts K = ε · (größter Wert) / n, wird die Tabelle klein (sie hängt nur noch von n und 1 / ε ab), und das Ergebnis ist garantiert mindestens (1 − ε) mal das Optimum. Die Garantie ist ein Schlimmster-Fall-Satz.
-3. **Stark NP-schwer.** Bei manchen Problemen bleibt die Härte, auch wenn alle Zahlen klein sind (zum Beispiel 3-Partition: 3m Zahlen in m Gruppen mit gleicher Summe). Dort fehlt ein pseudopolynomielles Verfahren, und (unter P ≠ NP) auch ein FPTAS.
+3. **Stark NP-schwer.** Bei manchen Problemen bleibt die Härte, auch wenn alle Zahlen klein sind (zum Beispiel 3-Partition: 3m Zahlen in m Gruppen mit gleicher Summe). Dort gibt es unter P ≠ NP weder ein pseudopolynomielles Verfahren noch (für Optimierungsprobleme mit polynomial beschränktem Zielwert) ein FPTAS.
         """
     )
 
@@ -149,7 +149,7 @@ with st.sidebar:
     st.header("⚙️ Einstellungen")
     st.markdown("**Fuhre packen**")
     n = st.slider("Pakete n", *bounds("n_slider"), key="n_slider", help="Pakete mit Gewicht und Wert. Auch die Falle und die Güte-Messreihe verwenden diese Zahl.")
-    d = st.slider("Stellen der Gewichte", *bounds("d_slider"), key="d_slider", help="Gewichte gleichverteilt in 1 bis 10^Stellen. Jede Stelle mehr macht die exakte Tabelle zehnmal größer.")
+    d = st.slider("Stellen der Gewichte", *bounds("d_slider"), key="d_slider", help="Gewichte gleichverteilt in 1 bis 10^Stellen. Jede Stelle mehr macht die exakte Tabelle etwa zehnmal größer.")
     seed = st.number_input("Zufalls-Seed der Pakete", *bounds("seed_input"), key="seed_input", step=1)
     st.button("🎲 Neue Pakete generieren", width="stretch", on_click=randomize_seed)
     family = st.selectbox("Familie der Pakete", list(C.FAMILIES), format_func=C.FAMILIES.get, key="family_select",
@@ -213,8 +213,8 @@ st.markdown("---")
 # --- Experimente --------------------------------------------------------------------------------------------------------------------------------
 
 st.subheader("🔬 Experiment: Wie wächst die Tabelle mit den Stellen?")
-st.caption(f"{len(C.E1_SEEDS)} feste Instanzen je Stellenzahl ({C.E1_N} Pakete, unkorreliert, Kapazität 40 % der Gewichtssumme), Median. Die Zellen der exakten Tabelle folgen der Formel n · (W + 1) (die Tests prüfen sie an echten Läufen); "
-           f"die des FPTAS sind gerechnet. Ab 7 Stellen wird die exakte Tabelle in der App nicht mehr gerechnet, nur gezählt. Die gestrichelte Linie markiert die gewählten Stellen.")
+st.caption(f"{len(C.E1_SEEDS)} feste Instanzen je Stellenzahl ({C.E1_N} Pakete, unkorreliert, Kapazität 40 % der Gewichtssumme), Median. Die Zellenzahl ist die Tabellengröße, n · (W + 1) bzw. n · (P + 1), aus der Formel und nicht im Lauf gezählt. "
+           f"Ab 7 Stellen wird die exakte Tabelle in der App nicht mehr gerechnet, nur gezählt. Die gestrichelte Linie markiert die gewählten Stellen.")
 digits_rows = _digits()
 st.plotly_chart(build_digits(digits_rows, highlight_d=settings.d), width="stretch", key="digits_chart")
 st.markdown(_md_table(
