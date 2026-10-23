@@ -146,6 +146,31 @@ def test_fptas_cells_follow_the_formula():
         assert all(k * p <= v < k * (p + 1) for p, v in zip(scaled, vals))
 
 
+def literal_table_dp(weights, values, capacity):
+    """Die Tabelle Zelle für Zelle gefüllt (Zeile i, Kapazität c) und dabei jede Zelle gezählt: Wert und Zellenzahl unabhängig von der Formel."""
+    row, cells = [0] * (capacity + 1), 0
+    for wi, vi in zip(weights, values):
+        new = []
+        for c in range(capacity + 1):
+            best = row[c]
+            if wi <= c:
+                best = max(best, row[c - wi] + vi)
+            new.append(best)
+            cells += 1
+        row = new
+    return row[capacity], cells
+
+
+def test_cells_equal_a_literally_counted_table():
+    for d in (1, 2):
+        for family in C.FAMILIES:
+            inst = make_instance(8, d, family, d + 1)
+            value, cells = literal_table_dp(inst.weights, inst.values, inst.capacity)
+            r = A.capacity_dp(inst.weights, inst.values, inst.capacity)
+            assert (r.value, r.cells) == (value, cells), (family, d)
+    assert literal_table_dp([2, 3], [3, 4], 5) == (7, 12)                                          # von Hand: 2 Zeilen mal 6 Kapazitäten, beide Pakete passen
+
+
 def test_capacity_dp_cells_equal_the_formula_on_real_runs():
     for d in (1, 2, 3, 4):
         inst = make_instance(10, d, "unc", d)
